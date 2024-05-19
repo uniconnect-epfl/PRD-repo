@@ -1,33 +1,30 @@
-# .github/workflows/convert-to-pdf.yml
+name: Convert PRD to PDF
 
-name: Docs to PDF
-# This workflow is triggered on pushes to the repository.
 on:
   push:
     branches:
       - main
-    # Paths can be used to only trigger actions when you have edited certain files, such as a file within the /docs directory
     paths:
-      - 'docs/**.md'
-      - 'docs/images/**'
-      - 'PRD.md'
+      - 'docs/PRD.md'
 
 jobs:
-  converttopdf:
-    name: Build PDF
+  convert_to_pdf:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: baileyjm02/markdown-to-pdf@v1
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Convert Markdown to PDF
+        uses: baileyjm02/markdown-to-pdf@v1
         with:
           input_dir: docs
           output_dir: pdfs
-          images_dir: docs/images
-          # for example <img src="./images/file-name.png">
-          image_import: ./images
-          # Default is true, can set to false to only get PDF files
-          build_html: false
-      - uses: actions/upload-artifact@v3
+          images_dir: docs/images # Update this if you have images in your Markdown
+          image_import: ./images   # Ensure this path is correct based on your Markdown image links
+          build_html: false        # Set this to true if you also need HTML output
+
+      - name: Upload PDF to GitHub Artifacts
+        uses: actions/upload-artifact@v3
         with:
           name: docs
           path: pdfs
