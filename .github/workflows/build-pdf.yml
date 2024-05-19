@@ -1,0 +1,26 @@
+name: Build PDF from PRD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Pandoc
+      uses: pandoc/core@v2
+
+    - name: Convert Markdown to PDF
+      run: pandoc -s PRD.md -o PRD.pdf
+
+    - name: Upload PDF to GitHub Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: PRD-pdf
+        path: PRD.pdf
