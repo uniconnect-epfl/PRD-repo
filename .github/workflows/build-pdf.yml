@@ -1,4 +1,4 @@
-name: Build PDF from PRD
+name: Build PDF from Markdown
 
 on:
   push:
@@ -13,8 +13,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Set up Pandoc
-      uses: pandoc/core@v2
+    - name: Install Pandoc
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y pandoc
 
     - name: Convert Markdown to PDF
       run: pandoc -s PRD.md -o PRD.pdf
